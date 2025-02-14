@@ -10,11 +10,16 @@ public class BallController : MonoBehaviour
 
     [SerializeField] private float force = 1f;
     [SerializeField] private InputManager inputManager;
+    [SerializeField] private Transform ballAnchor;
     void Start()
     {
         ballRB = GetComponent<Rigidbody>();
 
         inputManager.OnSpacePressed.AddListener(LaunchBall);
+        transform.parent = ballAnchor;
+        transform.localPosition = Vector3.zero;
+        ballRB.isKinematic = true;
+
     }
 
     public void LaunchBall()
@@ -22,7 +27,9 @@ public class BallController : MonoBehaviour
         if (isBallLaunched) return;
     
         isBallLaunched = true;
+        ballRB.isKinematic = false;
         ballRB.AddForce(transform.forward * force, ForceMode.Impulse);
+        transform.parent = null;
     }
     // Update is called once per frame
    /*  void Update()
